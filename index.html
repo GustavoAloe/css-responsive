@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrador de Tarefas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="div-container">
+        <h1>Administrador de Tarefas</h1>
+
+        <!--Form de Adição de Tarefas -->
+        <form id="task-form">
+            <label for="task-name">Nome da Tarefa:</label>
+            <input type="text" id="task-name" placeholder="Tarefa" required>
+            <label for="task-priority">Prioridade:</label>
+            <select id="task-priority">
+                <option value="#">--</option>
+                <option value="Alta">Alta</option>
+                <option value="Media">Média</option>
+                <option value="Baixa">Baixa</option>
+            </select>
+            <label for="task-date">Data:</label>
+            <input type="date" id="task-date" required>
+            <label for="task-desc">Descrição da Tarefa:</label>
+            <textarea id="task-desc" placeholder="Descrição" rows="3" cols="25"></textarea>
+            <button type="submit">Adicionar Tarefa</button>
+        </form>
+
+        <!-- Lista de Tarefas -->
+         <div class="table-container">
+             <table id="task-table">
+                 <thead>
+                     <tr>
+                         <th>Tarefa</th>
+                         <th>Prioridade</th>
+                         <th>Data</th>
+                         <th>Descrição</th>
+                         <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tbody id="task-list"></tbody>
+                    </tbody>
+                </table>
+            </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
