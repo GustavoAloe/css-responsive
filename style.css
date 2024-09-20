@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
 * {
     margin: 0;
     padding: 0;
@@ -54,7 +54,6 @@ label {
 }
 
 button {
-    background-color: #17a4cb;
     font-weight: bold;
     color: white;
     border: none;
@@ -62,8 +61,36 @@ button {
     transition: background-color 0.3s ease;
 }
 
-button:hover {
+.btn-submit {
+    background-color: #17a4cb;
+}
+
+.btn-submit:hover {
     background-color: #015cbf;
+}
+
+.btn-update {
+    background-color: #27a72b;
+}
+
+.btn-update:hover {
+    background-color: #45a049;
+}
+
+button.excluir {
+    background-color: #d9534f;
+}
+
+button.excluir:hover {
+    background-color: #c9302c;
+}
+
+button.editar {
+    background-color: rgb(194, 64, 194);
+}
+
+button.editar:hover {
+    background-color: purple;
 }
 
 table {
