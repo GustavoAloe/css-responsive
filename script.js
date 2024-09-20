@@ -1,88 +1,68 @@
 let taskToEdit = null;
 
-document.getElementById("task-form").addEventListener("submit", function (event) {
+document.getElementById("task-form").addEventListener("submit", (event) => {
     event.preventDefault();
     addOrUpdateTask();
 });
 
-document.getElementById("update-button").addEventListener("click", function () {
-    addOrUpdateTask(true);
-});
+document.getElementById("update-button").addEventListener("click", () => addOrUpdateTask(true));
 
 function addOrUpdateTask(isEdit = false) {
-    const nomeTarefa = document.getElementById("task-name").value;
-    const prioridadeTarefa = document.getElementById("task-priority").value;
-    const dataTarefa = document.getElementById("task-date").value;
-    const descTarefa = document.getElementById("task-desc").value;
+    const taskData = {
+        nomeTarefa: document.getElementById("task-name").value,
+        prioridadeTarefa: document.getElementById("task-priority").value,
+        dataTarefa: document.getElementById("task-date").value,
+        descTarefa: document.getElementById("task-desc").value
+    };
 
-    if (nomeTarefa && prioridadeTarefa !== "#" && dataTarefa && descTarefa) {
-        const taskData = { nomeTarefa, prioridadeTarefa, dataTarefa, descTarefa };
-        if (isEdit && taskToEdit) {
-            updateTask(taskData);
-        } else {
-            addTask(taskData);
-        }
+    if (Object.values(taskData).every(value => value && value !== "#")) {
+        isEdit ? updateTask(taskData) : addTask(taskData);
         document.getElementById('task-form').reset();
     }
 }
 
-function addTask(taskData) {
+function addTask({ nomeTarefa, prioridadeTarefa, dataTarefa, descTarefa }) {
     const listaTarefa = document.getElementById('task-list');
     const novaLinha = document.createElement("tr");
 
-    Object.values(taskData).forEach((valor, index) => {
+    [nomeTarefa, prioridadeTarefa, new Date(dataTarefa).toLocaleDateString('pt-BR'), descTarefa].forEach((valor, index) => {
         const novaCelula = document.createElement("td");
-        novaCelula.setAttribute('data-label', Object.keys(taskData)[index].replace(/([A-Z])/g, ' $1'));
-        novaCelula.textContent = index === 2 ? new Date(valor).toLocaleDateString('pt-BR') : valor;
+        novaCelula.textContent = valor;
         novaLinha.appendChild(novaCelula);
     });
 
-    const acaoCelula = document.createElement("td");
-    acaoCelula.setAttribute('data-label', 'Ação');
-    acaoCelula.innerHTML = `
-        <button class="editar" onclick="editTask(this)">Editar</button>
-        <button class="excluir" onclick="deleteTask(this)">Excluir</button>`;
-    novaLinha.appendChild(acaoCelula);
+    novaLinha.innerHTML += `
+        <td data-label="Ação">
+            <button class="editar" onclick="editTask(this)">Editar</button>
+            <button class="excluir" onclick="deleteTask(this)">Excluir</button>
+        </td>`;
 
     listaTarefa.appendChild(novaLinha);
 }
 
 function deleteTask(button) {
-    const listaTarefa = document.getElementById("task-list");
-    const linha = button.parentNode.parentNode;
-
-    const novasTarefas = Array.from(listaTarefa.rows).filter(row => row !== linha);
-
-    listaTarefa.innerHTML = '';
-    novasTarefas.forEach(row => listaTarefa.appendChild(row));
+    const linha = button.closest("tr");
+    linha.remove();
 }
 
 function editTask(button) {
-    const linha = button.parentNode.parentNode;
-    const cells = linha.children;
+    const [nomeTarefa, prioridadeTarefa, dataTarefa, descTarefa] = Array.from(button.closest("tr").children).map(cell => cell.textContent);
+    
+    document.getElementById("task-name").value = nomeTarefa;
+    document.getElementById("task-priority").value = prioridadeTarefa;
+    document.getElementById("task-date").value = dataTarefa.split('/').reverse().join('-');
+    document.getElementById("task-desc").value = descTarefa;
 
-    document.getElementById("task-name").value = cells[0].textContent;
-    document.getElementById("task-priority").value = cells[1].textContent;
-    document.getElementById("task-date").value = new Date(cells[2].textContent.split('/').reverse().join('-')).toISOString().substr(0, 10);
-    document.getElementById("task-desc").value = cells[3].textContent;
-
+    taskToEdit = button.closest("tr");
     document.getElementById("update-button").style.display = "inline-block";
-    taskToEdit = linha;
 }
 
-function updateTask(updatedData) {
+function updateTask({ nomeTarefa, prioridadeTarefa, dataTarefa, descTarefa }) {
     if (taskToEdit) {
-        const cells = Array.from(taskToEdit.children);
-        const keys = ['nomeTarefa', 'prioridadeTarefa', 'dataTarefa', 'descTarefa'];
-        
-        cells.forEach((cell, index) => {
-            if (index < 4) {
-                const key = keys[index];
-                cell.textContent = key === 'dataTarefa' ? new Date(updatedData[key]).toLocaleDateString('pt-BR') : updatedData[key];
-            }
+        [nomeTarefa, prioridadeTarefa, new Date(dataTarefa).toLocaleDateString('pt-BR'), descTarefa].forEach((valor, index) => {
+            taskToEdit.children[index].textContent = valor;
         });
 
-        // RESET EDIÇÃO
         taskToEdit = null;
         document.getElementById("update-button").style.display = "none";
     }
